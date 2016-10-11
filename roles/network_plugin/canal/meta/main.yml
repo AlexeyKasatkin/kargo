@@ -1,0 +1,10 @@
+---
+dependencies:
+  - role: download
+    file: "{{ downloads.flannel_server_helper }}"
+  - role: download
+    file: "{{ downloads.flannel }}"
+  - role: download
+    file: "{{ downloads.calico_cni_plugin }}"
+  - role: download
+    file: "{{ downloads.calico_node }}"

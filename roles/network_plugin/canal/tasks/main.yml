@@ -1,0 +1,25 @@
+---
+- name: Flannel | Write flannel configuration
+  template:
+    src: network.json
+    dest: /etc/flannel-network.json
+    backup: yes
+
+- name: Canal | Create canal pod manifest
+  template:
+    src: canal-pod.yml
+    dest: /etc/kubernetes/manifests/canal-pod.manifest
+  notify: delete default docker bridge
+
+- name: Calico | Copy cni plugins from hyperkube
+  command: "/usr/bin/docker run --rm -v /opt/cni/bin:/cnibindir {{ hyperkube_image_repo }}:{{ hyperkube_image_tag }} /usr/bin/rsync -a /opt/cni/bin/ /cnibindir/"
+  register: cni_task_result
+  until: cni_task_result.rc == 0
+  retries: 4
+  delay: "{{ retry_stagger | random + 3 }}"
+  changed_when: false
+
+- name: Calico | Install calico cni bin
+  command: rsync -pi "{{ local_release_dir }}/calico/bin/calico" "/opt/cni/bin/calico"
+  changed_when: false
+  when: "{{ overwrite_hyperkube_cni|bool }}"
