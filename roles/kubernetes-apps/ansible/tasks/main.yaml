@@ -21,3 +21,6 @@
 
 - include: tasks/calico-policy-controller.yml
   when: enable_network_policy is defined and enable_network_policy == True
+
+- include: tasks/canal-networking.yml
+  when: kube_network_plugin == 'canal'

@@ -1,0 +1,9 @@
+- name: Write canal configuration
+  template:
+    src: canal-config.yml
+    dest: /etc/kubernetes/canal-config.yaml
+
+- name: Start flannel and calico-node
+  kube:
+    kubectl: "{{bin_dir}}/kubectl"
+    filename: /etc/kubernetes/canal-config.yaml
