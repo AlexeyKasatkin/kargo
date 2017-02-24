@@ -6,6 +6,9 @@ kube_resolv_conf: "/etc/resolv.conf"
 
 kube_proxy_mode: iptables
 
+# How often configuration from the apiserver is refreshed.  Must be greater than 0. (default 15m0s)
+kube_proxy_config_sync_period: 15m
+
 # If using the pure iptables proxy, SNAT everything. Note that it breaks any
 # policy engine.
 kube_proxy_masquerade_all: false
